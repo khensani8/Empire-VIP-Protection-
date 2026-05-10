@@ -44,6 +44,9 @@
         "email": "Empire.vipprotection9@gmail.com",
         "address": {
           "@type": "PostalAddress",
+          "streetAddress": "Unit 8 B.K Reid Village, Fuel Road, Coronationville",
+          "addressLocality": "Johannesburg",
+          "postalCode": "2093",
           "addressCountry": "South Africa"
         },
         "description": "Professional armed guards, VIP protection, security training, event security, and property management services."
@@ -65,7 +68,6 @@
         <span class="logo-text" style="display: none">Empire VIP</span>
       </div>
 
-      <!-- Desktop links -->
       <ul class="nav-links">
         <li><a href="#home">Home</a></li>
         <li><a href="#about">About</a></li>
@@ -73,7 +75,6 @@
         <li><a href="#contact">Contact</a></li>
       </ul>
 
-      <!-- Hamburger button (mobile only) -->
       <button
         class="hamburger"
         id="hamburger"
@@ -83,7 +84,7 @@
       </button>
     </nav>
 
-    <!-- Mobile drawer (sits below nav, outside nav element) -->
+    <!-- Mobile drawer -->
     <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
       <ul>
         <li><a href="#home">Home</a></li>
@@ -208,6 +209,7 @@
         <p>Available 24/7</p>
       </div>
       <div class="contact-container">
+        <!-- FORM -->
         <div class="contact-form fade-in">
           <input type="text" id="fname" placeholder="Your Name" required />
           <input type="email" id="femail" placeholder="Your Email" required />
@@ -218,20 +220,31 @@
             Send Message
           </button>
         </div>
+
+        <!-- CONTACT INFO -->
         <div class="contact-info fade-in">
           <div class="info-item">
-            <i class="fas fa-phone"></i
-            ><a href="tel:+27717905965">071 790 5965</a>
+            <i class="fas fa-phone"></i>
+            <a href="tel:+27717905965">071 790 5965</a>
           </div>
           <div class="info-item">
-            <i class="fas fa-envelope"></i
-            ><a href="mailto:Empire.vipprotection9@gmail.com"
+            <i class="fas fa-envelope"></i>
+            <a href="mailto:Empire.vipprotection9@gmail.com"
               >Empire.vipprotection9@gmail.com</a
             >
           </div>
           <div class="info-item">
-            <i class="fas fa-clock"></i><span>Available 24/7</span>
+            <i class="fas fa-map-marker-alt"></i>
+            <span
+              >Unit 8 B.K Reid Village, Fuel Road,<br />Coronationville,
+              Johannesburg, 2093</span
+            >
           </div>
+          <div class="info-item">
+            <i class="fas fa-clock"></i>
+            <span>Available 24/7</span>
+          </div>
+
           <a
             href="https://wa.me/27717905965"
             target="_blank"
@@ -240,13 +253,22 @@
             style="display: inline-flex; align-items: center; gap: 8px">
             <i class="fab fa-whatsapp"></i> WhatsApp Us
           </a>
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114779.84146487483!2d27.978387!3d-26.2041028!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e950c68f0406a51%3A0x238ac9d9b1d34041!2sJohannesburg%2C%20South%20Africa!5e0!3m2!1sen!2sza!4v1700000000000"
-            height="250"
-            loading="lazy"
-            allowfullscreen
-            referrerpolicy="no-referrer-when-downgrade">
-          </iframe>
+
+          <div class="mapouter">
+            <div class="gmap_canvas">
+              <iframe
+                class="gmap_iframe"
+                frameborder="0"
+                scrolling="no"
+                marginheight="0"
+                marginwidth="0"
+                loading="lazy"
+                allowfullscreen
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://maps.google.com/maps?width=600&height=400&hl=en&q=Unit+8+B.K+Reid+Village,+Fuel+Road,+Coronationville,+Johannesburg,+2093&t=&z=15&ie=UTF8&iwloc=B&output=embed">
+              </iframe>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -311,12 +333,10 @@
         }
       });
 
-      // Close when any drawer link is tapped
       mobileDrawer.querySelectorAll("a").forEach(function (link) {
         link.addEventListener("click", closeDrawer);
       });
 
-      // Close when clicking outside
       document.addEventListener("click", function (e) {
         if (!mobileDrawer.contains(e.target) && !hamburger.contains(e.target)) {
           closeDrawer();
@@ -353,20 +373,57 @@
         var message = document.getElementById("fmessage").value.trim();
         var status = document.getElementById("formStatus");
 
+        /* Validation */
         if (!name || !email) {
           status.textContent = "Please fill in your name and email.";
           status.className = "form-status error";
+          status.style.display = "block";
           return;
         }
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
           status.textContent = "Please enter a valid email address.";
           status.className = "form-status error";
+          status.style.display = "block";
           return;
         }
 
-        var subject = encodeURIComponent("Enquiry from " + name);
-        var body = encodeURIComponent(
+        var subject = "Enquiry from " + name;
+        var bodyText =
           "Name: " +
+          name +
+          "\n" +
+          "Email: " +
+          email +
+          "\n" +
+          "Phone: " +
+          (phone || "Not provided") +
+          "\n\n" +
+          "Message:\n" +
+          (message || "No message provided");
+
+        /* ── Reliable cross-browser mailto trigger ──
+           We build a real <a> that is placed off-screen and clicked.
+           This avoids Chrome/Edge silently blocking dynamic mailto calls.  */
+        var link = document.createElement("a");
+        link.href =
+          "mailto:Empire.vipprotection9@gmail.com" +
+          "?subject=" +
+          encodeURIComponent(subject) +
+          "&body=" +
+          encodeURIComponent(bodyText);
+        link.style.position = "absolute";
+        link.style.left = "-9999px";
+        link.style.top = "-9999px";
+        document.body.appendChild(link);
+        link.click();
+        setTimeout(function () {
+          document.body.removeChild(link);
+        }, 1000);
+
+        /* WhatsApp pre-filled fallback */
+        var waText = encodeURIComponent(
+          "Hi Empire VIP Protection,\n\n" +
+            "Name: " +
             name +
             "\n" +
             "Email: " +
@@ -378,13 +435,17 @@
             "Message:\n" +
             (message || "No message provided"),
         );
-        window.location.href =
-          "mailto:Empire.vipprotection9@gmail.com?subject=" +
-          subject +
-          "&body=" +
-          body;
-        status.textContent = "Opening your email client…";
+
+        status.innerHTML =
+          "<strong>&#10003; Done!</strong> Your email client should open now.<br>" +
+          "No email app? Send via WhatsApp instead:<br><br>" +
+          '<a href="https://wa.me/27717905965?text=' +
+          waText +
+          '" ' +
+          'target="_blank" rel="noopener" class="wa-fallback-btn">' +
+          '<i class="fab fa-whatsapp"></i> Send via WhatsApp</a>';
         status.className = "form-status success";
+        status.style.display = "block";
       });
     </script>
   </body>

@@ -54,7 +54,7 @@ nav {
 }
 
 .logo img {
-  height: 85px;
+  height: 52px;
   width: auto;
   object-fit: contain;
   display: block;
@@ -384,6 +384,10 @@ nav {
   background: #e6f4ea;
   color: #2e7d32;
   display: block;
+  line-height: 1.6;
+}
+.form-status.success a {
+  color: #fff !important;
 }
 .form-status.error {
   background: #fdecea;
